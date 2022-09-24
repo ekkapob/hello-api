@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-api-deployment
+  namespace: test-uat
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-api
+  template:
+    metadata:
+      labels:
+        app: hello-api
+    spec:
+      containers:
+      - name: hellp-api
+        image: azadpk8s2y0anxpaxdq1.azurecr.io/test/hello-api:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-api-service
+  namespace: test-uat
+spec:
+  selector:
+    app: hello-api
+  ports:
+    - name: hello-api
+      protocol: TCP
+      port: 8082
+      targetPort: 8080
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "75"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "75"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "75"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains";
+      more_set_headers "Content-Security-Policy: default-src 'self'";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "Permissions-Policy: fullscreen=(), geolocation=()";
+      more_set_headers "Referrer-Policy: no-referrer";
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: hello-api-ingress
+  namespace: test-uat
+spec:
+  rules:
+  - host: voc-npr.azay.co.th
+    http:
+      paths:
+      - path: /test/hello/ekkapob(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: hello-api-service
+            port:
+              number: 8082
