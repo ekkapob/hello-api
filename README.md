@@ -64,12 +64,13 @@ spec:
         app: hello-api
     spec:
       containers:
-      - name: hellp-api
+      - name: hello-api
         image: azadpk8s2y0anxpaxdq1.azurecr.io/test/hello-api:1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
+        - name: PORT
           value: "8080"
 ```
 
@@ -158,7 +159,7 @@ spec:
         app: hello-api
     spec:
       containers:
-      - name: hellp-api
+      - name: hello-api
         image: azadpk8s2y0anxpaxdq1.azurecr.io/test/hello-api:1.0.0
         imagePullPolicy: Always
         ports:
@@ -219,7 +220,7 @@ spec:
         app: hello-api
     spec:
       containers:
-      - name: hellp-api
+      - name: hello-api
         image: azadpk8s2y0anxpaxdq1.azurecr.io/test/hello-api:1.0.0
         imagePullPolicy: Always
         ports:

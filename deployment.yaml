@@ -14,7 +14,7 @@ spec:
         app: hello-api
     spec:
       containers:
-      - name: hellp-api
+      - name: hello-api
         image: azadpk8s2y0anxpaxdq1.azurecr.io/test/hello-api:1.0.0
         imagePullPolicy: Always
         ports:
